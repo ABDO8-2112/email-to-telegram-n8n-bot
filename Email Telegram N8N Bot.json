@@ -1,0 +1,115 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailReadImap",
+      "typeVersion": 2,
+      "position": [
+        60,
+        60.09375
+      ],
+      "id": "d3be91ba-6cc2-4cec-8e96-242f35e4f350",
+      "name": "Email Trigger (IMAP)",
+      "credentials": {
+        "imap": {
+          "id": "9VJkzBOaChd7hTwq",
+          "name": "IMAP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "590f0d6f-098a-456a-9302-0b8593241865",
+              "leftValue": "={{$json[\"subject\"]}}",
+              "rightValue": "#tweet",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        280,
+        80
+      ],
+      "id": "f2616fe8-768d-433b-acb3-fd03d3b786a4",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "chatId": "8156165858",
+        "text": "={{$json[\"text\"] || $json[\"plainText\"] || $json[\"html\"]}}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        500,
+        -20
+      ],
+      "id": "98bbdada-25e8-4fbd-b340-0674bf73af60",
+      "name": "Send a text message",
+      "webhookId": "689bc4fe-54e7-4556-8c3a-9de58fc556c7",
+      "credentials": {
+        "telegramApi": {
+          "id": "YIsclZvWTIF88bNn",
+          "name": "Telegram account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Email Trigger (IMAP)": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "e4c28c8e-bd8a-49b0-9f1f-9836165cc5e8",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "4d40a936501b427e938f77689e78a2b145083cada4a057b2472deba177f4d43a"
+  },
+  "id": "7AQvc4UByWVB2umo",
+  "tags": []
+}
